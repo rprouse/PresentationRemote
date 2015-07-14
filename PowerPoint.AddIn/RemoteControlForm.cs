@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PowerPoint.AddIn
@@ -22,6 +15,22 @@ namespace PowerPoint.AddIn
         public RemoteControlForm(RemoteControlAddin addin) : this()
         {
             _addin = addin;
+        }
+
+        internal string Notes
+        {
+            set
+            {
+                Action setText = () => _notes.Text = value;
+                if(InvokeRequired)
+                {
+                    Invoke(setText);
+                }
+                else
+                {
+                    setText();
+                }
+            }
         }
 
         private void OnStop(object sender, EventArgs e)

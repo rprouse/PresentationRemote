@@ -17,6 +17,10 @@ namespace PowerPoint.AddIn
         private void OnStartup(object sender, System.EventArgs e)
         {
             _form = new RemoteControlForm(this);
+
+            Application.SlideShowBegin += OnSlideShowBegin;
+            Application.SlideShowEnd += OnSlideShowEnd;
+            Application.SlideShowNextSlide += OnNextSlide;
         }
 
         private void OnShutdown(object sender, System.EventArgs e)
@@ -26,6 +30,10 @@ namespace PowerPoint.AddIn
                 _form.Dispose();
                 _form = null;
             }
+
+            Application.SlideShowBegin -= OnSlideShowBegin;
+            Application.SlideShowEnd -= OnSlideShowEnd;
+            Application.SlideShowNextSlide -= OnNextSlide;
         }
 
         #region VSTO generated code
@@ -38,15 +46,14 @@ namespace PowerPoint.AddIn
         {
             Startup += OnStartup;
             Shutdown += OnShutdown;
-
-            Application.SlideShowBegin += OnSlideShowBegin;
-            Application.SlideShowEnd += OnSlideShowEnd;
-            Application.SlideShowNextSlide += OnNextSlide;
         }
 
-        private void OnNextSlide(SlideShowWindow Wn)
+        private void OnNextSlide(SlideShowWindow window)
         {
-            Console.WriteLine(GetNotes(Wn.View.Slide));
+            if (_form != null)
+            {
+                _form.Notes = GetNotes(window.View.Slide);
+            }
         }
 
         private void OnSlideShowBegin(SlideShowWindow window)
@@ -58,7 +65,7 @@ namespace PowerPoint.AddIn
             }
         }
 
-        private void OnSlideShowEnd(Presentation Pres)
+        private void OnSlideShowEnd(Presentation presentation)
         {
             _win = null;
             if (_form != null)
