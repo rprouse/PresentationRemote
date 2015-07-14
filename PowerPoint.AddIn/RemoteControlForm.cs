@@ -5,14 +5,14 @@ namespace PowerPoint.AddIn
 {
     public partial class RemoteControlForm : Form
     {
-        RemoteControlAddin _addin;
+        IRemoteControl _addin;
 
         public RemoteControlForm()
         {
             InitializeComponent();
         }
 
-        public RemoteControlForm(RemoteControlAddin addin) : this()
+        public RemoteControlForm(IRemoteControl addin) : this()
         {
             _addin = addin;
         }
@@ -40,7 +40,7 @@ namespace PowerPoint.AddIn
 
         private void OnPrev(object sender, EventArgs e)
         {
-            _addin.PrevSlide();
+            _addin.PreviousSlide();
         }
 
         private void OnNext(object sender, EventArgs e)

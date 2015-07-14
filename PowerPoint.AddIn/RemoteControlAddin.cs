@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
-using Microsoft.Office.Interop.PowerPoint;
+﻿using Microsoft.Office.Interop.PowerPoint;
 using Office = Microsoft.Office.Core;
-using System.Runtime.InteropServices;
 
 namespace PowerPoint.AddIn
 {
-    public partial class RemoteControlAddin
+    public partial class RemoteControlAddin : IRemoteControl
     {
         RemoteControlForm _form;
         SlideShowWindow _win;
@@ -94,7 +88,7 @@ namespace PowerPoint.AddIn
 
         #region Public Methods
 
-        internal void NextSlide()
+        public void NextSlide()
         {
             if( _win != null )
             {
@@ -102,7 +96,7 @@ namespace PowerPoint.AddIn
             }
         }
 
-        internal void PrevSlide()
+        public void PreviousSlide()
         {
             if (_win != null)
             {
@@ -110,7 +104,7 @@ namespace PowerPoint.AddIn
             }
         }
 
-        internal void StopPresentation()
+        public void StopPresentation()
         {
             if (_win != null)
             {
