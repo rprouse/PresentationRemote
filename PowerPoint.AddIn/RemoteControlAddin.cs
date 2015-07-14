@@ -7,7 +7,7 @@ namespace PowerPoint.AddIn
     {
         RemoteControlForm _form;
         SlideShowWindow _win;
-
+        
         private void OnStartup(object sender, System.EventArgs e)
         {
             _form = new RemoteControlForm(this);
@@ -42,11 +42,15 @@ namespace PowerPoint.AddIn
             Shutdown += OnShutdown;
         }
 
+        #endregion
+
+        #region Event Handlers
+
         private void OnNextSlide(SlideShowWindow window)
         {
-            if (_form != null)
+            if (_form != null && NotesChanged != null)
             {
-                _form.Notes = GetNotes(window.View.Slide);
+                NotesChanged(this, new NotesChangedEventArgs(GetNotes(window.View.Slide)));
             }
         }
 
@@ -86,7 +90,9 @@ namespace PowerPoint.AddIn
 
         #endregion
 
-        #region Public Methods
+        #region Implementation of IRemoteControl
+
+        public event NotesChangedEventHandler NotesChanged;
 
         public void NextSlide()
         {

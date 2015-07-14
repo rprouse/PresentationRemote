@@ -5,47 +5,41 @@ namespace PowerPoint.AddIn
 {
     public partial class RemoteControlForm : Form
     {
-        IRemoteControl _addin;
+        IRemoteControl _remote;
 
         public RemoteControlForm()
         {
             InitializeComponent();
         }
 
-        public RemoteControlForm(IRemoteControl addin) : this()
+        public RemoteControlForm(IRemoteControl remote) : this()
         {
-            _addin = addin;
+            _remote = remote;
+            _remote.NotesChanged += OnNotesChanged;
         }
 
-        internal string Notes
+        private void OnNotesChanged(object sender, NotesChangedEventArgs args)
         {
-            set
-            {
-                Action setText = () => _notes.Text = value;
-                if(InvokeRequired)
-                {
-                    Invoke(setText);
-                }
-                else
-                {
-                    setText();
-                }
-            }
+            Action setText = () => _notes.Text = args.Notes;
+            if(InvokeRequired)
+                Invoke(setText);
+            else
+                setText();
         }
 
         private void OnStop(object sender, EventArgs e)
         {
-            _addin.StopPresentation();
+            _remote.StopPresentation();
         }
 
         private void OnPrev(object sender, EventArgs e)
         {
-            _addin.PreviousSlide();
+            _remote.PreviousSlide();
         }
 
         private void OnNext(object sender, EventArgs e)
         {
-            _addin.NextSlide();
+            _remote.NextSlide();
         }
     }
 }
